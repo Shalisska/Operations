@@ -7,12 +7,12 @@ namespace Operations
 {
     public class OperationService
     {
-        public ResourceTransaction DoOperation(StorageResource currency, int resourceId, decimal value, decimal price)
+        public void DoOperation(StorageResource currency, int resourceId, decimal value, decimal price)
         {
             var transactionId = DateTime.Now.Ticks;
-            var currTransaction = new ResourceTransaction(resourceId, transactionId, value, price);
+            var currTransaction = new TransactionNote(resourceId, transactionId, value, price);
 
-            return currTransaction;
+            currency.CurrencyTransactions.Add(currTransaction);
         }
     }
 
@@ -42,16 +42,42 @@ namespace Operations
         public StorageResource(int id)
         {
             Id = id;
-            CurrencyTransactions = new List<ResourceTransaction>();
+            CurrencyTransactions = new List<TransactionNote>();
         }
 
         public int Id { get; set; }
-        public List<ResourceTransaction> CurrencyTransactions { get; set; }
+        public List<TransactionNote> CurrencyTransactions { get; set; }
+
+        public decimal GetValue()
+        {
+            var value = 0m;
+
+            foreach(var note in CurrencyTransactions)
+            {
+                value += note.Value;
+            }
+
+            return value;
+        }
+
+        public decimal GetPrice()
+        {
+            var price = 0m;
+
+            foreach(var note in CurrencyTransactions)
+            {
+                price += note.Price;
+            }
+
+            price /= CurrencyTransactions.Count;
+
+            return price;
+        }
     }
 
-    public class ResourceTransaction
+    public class TransactionNote
     {
-        public ResourceTransaction(
+        public TransactionNote(
             int resourceId,
             long transactionId,
             decimal value,

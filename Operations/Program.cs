@@ -9,9 +9,12 @@ namespace Operations
             var curr = new StorageResource(0);
             var operationService = new OperationService();
 
-            var currTransaction1 = operationService.DoOperation(curr, 0, 10, 1);
+            operationService.DoOperation(curr, 0, 10, 1);
 
-            var currTransaction2 = operationService.DoOperation(curr, 0, 5, 2);
+            operationService.DoOperation(curr, 0, 5, 2);
+
+            var value = curr.GetValue();
+            var price = curr.GetPrice();
 
             Console.WriteLine("Hello World!");
             Console.ReadKey();

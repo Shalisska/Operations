@@ -7,12 +7,16 @@ namespace Operations
 {
     public class OperationService
     {
-        public void DoOperation(StorageResource currency, int resourceId, decimal value, decimal price)
+        public void DoOperation(Storage storage, int resourceId, decimal value, decimal price)
         {
             var transactionId = DateTime.Now.Ticks;
             var currTransaction = new TransactionNote(resourceId, transactionId, value, price);
 
-            currency.CurrencyTransactions.Add(currTransaction);
+            var storageResource = storage.Currencies.FirstOrDefault(r => r.Id == resourceId);
+
+            storageResource.CurrencyTransactions.Add(currTransaction);
+
+            storageResource.Update(currTransaction);
         }
     }
 
@@ -34,7 +38,25 @@ namespace Operations
 
     public class Storage
     {
+        public Storage()
+        {
+            Currencies = SetStartCurrencies();
+        }
 
+        public List<StorageResource> Currencies { get; set; }
+
+        private List<StorageResource> SetStartCurrencies()
+        {
+            var currencyRepository = new CurrencyRepository();
+
+            var storageResources = new List<StorageResource>();
+            var dataResources = currencyRepository.Currencies;
+
+            foreach (var resource in dataResources)
+                storageResources.Add(new StorageResource(resource.Id));
+
+            return storageResources;
+        }
     }
 
     public class StorageResource
@@ -46,32 +68,18 @@ namespace Operations
         }
 
         public int Id { get; set; }
+
+        public decimal Value { get; set; }
+        public decimal Price { get; set; }
+        public decimal Total { get; set; }
+
         public List<TransactionNote> CurrencyTransactions { get; set; }
 
-        public decimal GetValue()
+        public void Update(TransactionNote transaction)
         {
-            var value = 0m;
-
-            foreach(var note in CurrencyTransactions)
-            {
-                value += note.Value;
-            }
-
-            return value;
-        }
-
-        public decimal GetPrice()
-        {
-            var price = 0m;
-
-            foreach(var note in CurrencyTransactions)
-            {
-                price += note.Price;
-            }
-
-            price /= CurrencyTransactions.Count;
-
-            return price;
+            Value += transaction.Value;
+            Total += transaction.Total;
+            Price = Total / Value;
         }
     }
 
@@ -88,6 +96,7 @@ namespace Operations
             DateOfCreation = DateTime.Now;
             Value = value;
             Price = price;
+            Total = value * price;
         }
 
         public int ResourceId { get; set; }
@@ -95,6 +104,7 @@ namespace Operations
         public DateTime DateOfCreation { get; set; }
         public decimal Value { get; set; }
         public decimal Price { get; set; }
+        public decimal Total { get; set; }
     }
 
     public class CurrencyRepository

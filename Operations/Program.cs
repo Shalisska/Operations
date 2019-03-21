@@ -12,7 +12,7 @@ namespace Operations
 
             operationService.DoOperation(storage, 0, 10, 1);
 
-            operationService.DoOperation(storage, 0, 10, 2);
+            operationService.DoOperation(storage, 1, 10, 2);
 
             Console.WriteLine("Hello World!");
             Console.ReadKey();

@@ -7,16 +7,11 @@ namespace Operations
 {
     public class OperationService
     {
-        public void DoOperation(Storage storage, int resourceId, decimal value, decimal price)
+        public void DoOperation(Storage storage, int resourceId, decimal quantity, decimal price)
         {
             var transactionId = DateTime.Now.Ticks;
-            var currTransaction = new TransactionNote(resourceId, transactionId, value, price);
 
-            var storageResource = storage.Currencies.FirstOrDefault(r => r.Id == resourceId);
-
-            storageResource.CurrencyTransactions.Add(currTransaction);
-
-            storageResource.Update(currTransaction);
+            storage.DoIncomeOperation(resourceId, quantity, price);
         }
     }
 
@@ -25,7 +20,7 @@ namespace Operations
 
     }
 
-    public enum TransactionType
+    public enum TransactionDirection
     {
         Income = 0,
         Outcome = 1
@@ -44,6 +39,16 @@ namespace Operations
         }
 
         public List<StorageResource> Currencies { get; set; }
+
+        public void DoIncomeOperation(int resourceId, decimal quantity, decimal price)
+        {
+            var resource = Currencies.FirstOrDefault(c => c.Id == resourceId);
+
+            if (resource == null)
+                Currencies.Add(new StorageResource(resourceId));
+
+            resource.AddResource(quantity, price);
+        }
 
         private List<StorageResource> SetStartCurrencies()
         {
@@ -64,48 +69,52 @@ namespace Operations
         public StorageResource(int id)
         {
             Id = id;
-            CurrencyTransactions = new List<TransactionNote>();
         }
 
         public int Id { get; set; }
 
-        public decimal Value { get; set; }
+        public decimal Quantity { get; set; }
         public decimal Price { get; set; }
-        public decimal Total { get; set; }
+        public decimal TotalCost { get; set; }
 
-        public List<TransactionNote> CurrencyTransactions { get; set; }
-
-        public void Update(TransactionNote transaction)
+        public void AddResource(decimal quantity, decimal price)
         {
-            Value += transaction.Value;
-            Total += transaction.Total;
-            Price = Total / Value;
+            Quantity += quantity;
+            TotalCost += quantity * price;
+            Price = TotalCost / Quantity;
         }
     }
 
-    public class TransactionNote
-    {
-        public TransactionNote(
-            int resourceId,
-            long transactionId,
-            decimal value,
-            decimal price)
-        {
-            ResourceId = resourceId;
-            TransactionId = transactionId;
-            DateOfCreation = DateTime.Now;
-            Value = value;
-            Price = price;
-            Total = value * price;
-        }
+    //public class ResourcePool
+    //{
+    //    public ResourcePool(
+    //        int resourceId)
+    //    {
+    //        ResourceId = resourceId;
+    //        DateOfCreation = DateTime.Now;
+    //    }
 
-        public int ResourceId { get; set; }
-        public long TransactionId { get; set; }
-        public DateTime DateOfCreation { get; set; }
-        public decimal Value { get; set; }
-        public decimal Price { get; set; }
-        public decimal Total { get; set; }
-    }
+    //    public ResourcePool(
+    //        int resourceId,
+    //        long transactionId,
+    //        decimal value,
+    //        decimal price)
+    //    {
+    //        ResourceId = resourceId;
+    //        TransactionId = transactionId;
+    //        DateOfCreation = DateTime.Now;
+    //        Value = value;
+    //        Price = price;
+    //        Total = value * price;
+    //    }
+
+    //    public int ResourceId { get; set; }
+    //    public long TransactionId { get; set; }
+    //    public DateTime DateOfCreation { get; set; }
+    //    public decimal Value { get; set; }
+    //    public decimal Price { get; set; }
+    //    public decimal Total { get; set; }
+    //}
 
     public class CurrencyRepository
     {

@@ -7,11 +7,16 @@ namespace Operations
 {
     public class OperationService
     {
-        public void DoOperation(Storage storage, int resourceId, decimal quantity, decimal price)
+        public void DoOperation(Storage storage, int resourceId, decimal quantity, decimal price, TransactionDirection direction)
         {
             var transactionId = DateTime.Now.Ticks;
 
-            storage.DoIncomeOperation(resourceId, quantity, price);
+            if (direction == TransactionDirection.Income)
+                storage.DoIncomeOperation(resourceId, quantity, price);
+            else
+            {
+
+            }
         }
     }
 
@@ -48,6 +53,16 @@ namespace Operations
                 Currencies.Add(new StorageResource(resourceId));
 
             resource.AddResource(quantity, price);
+        }
+
+        public void DoOutcomeOperation(int resourceId, decimal quantity, decimal price)
+        {
+            var resource = Currencies.FirstOrDefault(c => c.Id == resourceId);
+
+            if (resource == null)
+                Currencies.Add(new StorageResource(resourceId));
+
+
         }
 
         private List<StorageResource> SetStartCurrencies()

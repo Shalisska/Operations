@@ -40,7 +40,7 @@ namespace Operations
     {
         public Storage()
         {
-            Currencies = SetStartCurrencies();
+            Currencies = new List<StorageResource>();
         }
 
         public List<StorageResource> Currencies { get; set; }
@@ -50,7 +50,10 @@ namespace Operations
             var resource = Currencies.FirstOrDefault(c => c.Id == resourceId);
 
             if (resource == null)
-                Currencies.Add(new StorageResource(resourceId));
+            {
+                resource = new StorageResource(resourceId);
+                Currencies.Add(resource);
+            }
 
             resource.AddResource(quantity, price);
         }
@@ -65,18 +68,18 @@ namespace Operations
 
         }
 
-        private List<StorageResource> SetStartCurrencies()
-        {
-            var currencyRepository = new CurrencyRepository();
+        //private List<StorageResource> SetStartCurrencies()
+        //{
+        //    var currencyRepository = new CurrencyRepository();
 
-            var storageResources = new List<StorageResource>();
-            var dataResources = currencyRepository.Currencies;
+        //    var storageResources = new List<StorageResource>();
+        //    var dataResources = currencyRepository.Currencies;
 
-            foreach (var resource in dataResources)
-                storageResources.Add(new StorageResource(resource.Id));
+        //    foreach (var resource in dataResources)
+        //        storageResources.Add(new StorageResource(resource.Id));
 
-            return storageResources;
-        }
+        //    return storageResources;
+        //}
     }
 
     public class StorageResource

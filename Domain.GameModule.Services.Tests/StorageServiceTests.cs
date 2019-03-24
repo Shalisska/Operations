@@ -1,4 +1,5 @@
 ﻿using Domain.GameModule.Entities;
+using Domain.GameModule.Entities.Resources;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,9 +9,9 @@ namespace Domain.GameModule.Services.Tests
 {
     public class StorageServiceTests
     {
-        private ResourcePool CreateStorageResource(decimal startQuantity, decimal startCostPrice)
+        private ResourcePool<Resource> CreateResourcePool(decimal startQuantity, decimal startCostPrice)
         {
-            var resource = new ResourcePool(0)
+            var resource = new ResourcePool<Resource>(0)
             {
                 Quantity = startQuantity,
                 CostPrice = startCostPrice
@@ -30,13 +31,13 @@ namespace Domain.GameModule.Services.Tests
             var quantity = 10m;
             var price = 5m;
 
-            var resourceExpected = CreateStorageResource(startQuantity, startCostPrice);
+            var resourceExpected = CreateResourcePool(startQuantity, startCostPrice);
 
             resourceExpected.Quantity += quantity;
             resourceExpected.TotalCost = resourceExpected.GetTotalCost() + (quantity * price);
             resourceExpected.CostPrice = resourceExpected.TotalCost / resourceExpected.Quantity;
 
-            var resourceActual = CreateStorageResource(startQuantity, startCostPrice);
+            var resourceActual = CreateResourcePool(startQuantity, startCostPrice);
             service.AddResource(resourceActual, quantity, price);
 
             Assert.Equal(resourceExpected.Quantity, resourceActual.Quantity);
@@ -52,8 +53,8 @@ namespace Domain.GameModule.Services.Tests
             var startQuantity = 20m;
             var startCostPrice = 2m;
 
-            var resourceExpected = CreateStorageResource(startQuantity, startCostPrice);
-            var resourceActual = CreateStorageResource(startQuantity, startCostPrice);
+            var resourceExpected = CreateResourcePool(startQuantity, startCostPrice);
+            var resourceActual = CreateResourcePool(startQuantity, startCostPrice);
 
             var quantity = 10m;
 
@@ -74,7 +75,7 @@ namespace Domain.GameModule.Services.Tests
             var startQuantity = 20m;
             var startCostPrice = 2m;
 
-            var resourceActual = CreateStorageResource(startQuantity, startCostPrice);
+            var resourceActual = CreateResourcePool(startQuantity, startCostPrice);
 
             var quantity = startQuantity;
 
@@ -93,7 +94,7 @@ namespace Domain.GameModule.Services.Tests
             var startQuantity = 5m;
             var startCostPrice = 2m;
 
-            var resourceActual = CreateStorageResource(startQuantity, startCostPrice);
+            var resourceActual = CreateResourcePool(startQuantity, startCostPrice);
 
             var quantity = 10m;
             var messageExpected = $"More than {startQuantity}";

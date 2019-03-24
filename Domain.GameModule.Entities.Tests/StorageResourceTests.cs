@@ -1,6 +1,7 @@
 using System;
 using Xunit;
 using Domain.GameModule.Entities;
+using Domain.GameModule.Entities.Resources;
 
 namespace Domain.GameModule.Entities.Tests
 {
@@ -12,7 +13,7 @@ namespace Domain.GameModule.Entities.Tests
             var quantity = 10m;
             var price = 5m;
 
-            var resource = new ResourcePool(0)
+            var resource = new ResourcePool<Resource>(0)
             {
                 Quantity = quantity,
                 CostPrice = price

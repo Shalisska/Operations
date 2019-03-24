@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Domain.GameModule.Entities
 {
-    public class ResourcePool
+    public class ResourcePool<T> where T : class
     {
         public ResourcePool(int id)
         {

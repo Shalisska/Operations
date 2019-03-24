@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.GameModule.Entities.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,10 @@ namespace Domain.GameModule.Entities
     {
         public Storage()
         {
-            Currencies = new List<ResourcePool>();
+            Resources = new List<ResourcePool<Resource>>();
         }
 
-        public List<ResourcePool> Currencies { get; set; }
+        public List<ResourcePool<Resource>> Resources { get; set; }
 
         //public void DoIncomeOperation(int resourceId, decimal quantity, decimal price)
         //{

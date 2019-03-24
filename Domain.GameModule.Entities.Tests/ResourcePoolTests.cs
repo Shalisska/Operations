@@ -5,7 +5,7 @@ using Domain.GameModule.Entities.Resources;
 
 namespace Domain.GameModule.Entities.Tests
 {
-    public class StorageResourceTests
+    public class ResourcePoolTests
     {
         [Fact]
         public void GetTotalCost()

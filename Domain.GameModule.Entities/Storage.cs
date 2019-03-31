@@ -15,6 +15,8 @@ namespace Domain.GameModule.Entities
 
         public List<ResourcePool<Resource>> Resources { get; set; }
 
+        public List<ResourcePool<Currency>> Currencies { get; set; }
+
         //public void DoIncomeOperation(int resourceId, decimal quantity, decimal price)
         //{
         //    var resource = Currencies.FirstOrDefault(c => c.Id == resourceId);

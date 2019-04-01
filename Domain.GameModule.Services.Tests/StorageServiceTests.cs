@@ -97,7 +97,7 @@ namespace Domain.GameModule.Services.Tests
             var resourceActual = CreateResourcePool(startQuantity, startCostPrice);
 
             var quantity = 10m;
-            var messageExpected = $"More than {startQuantity}";
+            var messageExpected = $"More than {startQuantity}\r\nParameter name: quantity";
 
             Action action = () => service.RemoveResource(resourceActual, quantity);
 
@@ -109,7 +109,7 @@ namespace Domain.GameModule.Services.Tests
             }
             catch(ArgumentOutOfRangeException ex)
             {
-                var message = ex.ParamName;
+                var message = ex.Message;
                 Assert.Equal(messageExpected, message);
             }
         }

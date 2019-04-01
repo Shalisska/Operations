@@ -18,7 +18,7 @@ namespace Domain.GameModule.Services
         public void RemoveResource<T>(ResourcePool<T> resource, decimal quantity) where T : class
         {
             if (resource.Quantity < quantity)
-                throw new ArgumentOutOfRangeException($"More than {resource.Quantity}");
+                throw new ArgumentOutOfRangeException("quantity", $"More than {resource.Quantity}");
 
             if (resource.Quantity == quantity)
             {

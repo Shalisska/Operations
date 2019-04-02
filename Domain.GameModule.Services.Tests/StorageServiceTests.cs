@@ -68,7 +68,7 @@ namespace Domain.GameModule.Services.Tests
         }
 
         [Fact]
-        public void RemoveResourceAllQuantity()
+        public void RemoveResource_AllQuantity()
         {
             var service = new StorageService();
 
@@ -87,7 +87,7 @@ namespace Domain.GameModule.Services.Tests
         }
 
         [Fact]
-        public void RemoveResourceMore()
+        public void RemoveResource_MoreThanAvailable()
         {
             var service = new StorageService();
 
@@ -112,6 +112,41 @@ namespace Domain.GameModule.Services.Tests
                 var message = ex.Message;
                 Assert.Equal(messageExpected, message);
             }
+        }
+
+        [Theory]
+        [InlineData(0, 20)]
+        [InlineData(10, 20)]
+        [InlineData(20, 20)]
+        [InlineData(30, 20)]
+        public void CheckResourceAvalability(decimal storageQuantity, decimal requiredQuantity)
+        {
+            var service = new StorageService();
+            var resourcePool = CreateResourcePool(storageQuantity, 2m);
+
+            decimal quantityExpected;
+            bool resultExpected;
+
+            if (storageQuantity == 0)
+            {
+                quantityExpected = 0;
+                resultExpected = false;
+            }
+            else if (storageQuantity < requiredQuantity)
+            {
+                quantityExpected = storageQuantity;
+                resultExpected = false;
+            }
+            else
+            {
+                quantityExpected = requiredQuantity;
+                resultExpected = true;
+            }
+
+            var (resultActual, quantityActual) = service.CheckResourceAvalability(resourcePool, requiredQuantity);
+
+            Assert.Equal(quantityExpected, quantityActual);
+            Assert.Equal(resultExpected, resultActual);
         }
     }
 }

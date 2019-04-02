@@ -105,4 +105,42 @@ namespace Operations
         public string Name { get; set; }
         public bool BaseCurrency { get; set; }
     }
+
+    public class ResourceRepository
+    {
+        public ResourceRepository()
+        {
+            Resources = new List<ResourceData>
+            {
+                new ResourceData(0, "woods"),
+                new ResourceData(1, "stones"),
+                new ResourceData(2, "irons"),
+                new ResourceData(3, "cereals")
+            };
+        }
+
+        public List<ResourceData> Resources { get; set; }
+
+        public ResourceData GetResource(int id)
+        {
+            var resource = Resources.FirstOrDefault(c => c.Id == id);
+
+            if (resource == null)
+                return null;
+
+            return resource;
+        }
+    }
+
+    public class ResourceData
+    {
+        public ResourceData(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
 }

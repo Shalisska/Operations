@@ -31,5 +31,20 @@ namespace Domain.GameModule.Services
             resource.Quantity -= quantity;
             resource.TotalCost -= resource.GetTotalCost();
         }
+
+        public (bool isAvailable, decimal quantityAvailable) CheckResourceAvalability<T>(ResourcePool<T> resource, decimal quantity) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public ResourcePool<T> GetResource<T>(ResourcePool<T> resource, decimal quantity) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public ResourcePool<T> GetAllResource<T>(ResourcePool<T> resource, decimal quantity) where T : class
+        {
+            throw new NotImplementedException();
+        }
     }
 }
